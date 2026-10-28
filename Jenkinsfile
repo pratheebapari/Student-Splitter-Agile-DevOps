@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         booleanParam(name: 'PUSH_TO_DOCKERHUB', defaultValue: false,
-            description: 'Push image to Docker Hub (requires Jenkins credential dockerhub-creds-v2)')
+                     description: 'Push image to Docker Hub (requires Jenkins credential dockerhub-studentsplitter-v3)')
     }
 
     environment {
@@ -27,7 +27,7 @@ pipeline {
         stage('Push to Docker Hub') {
             when { expression { return params.PUSH_TO_DOCKERHUB } }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds-v2', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-studentsplitter-v3', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_TOKEN')]){
                     bat 'echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USER% --password-stdin'
                     bat 'docker tag %IMAGE_NAME%:%IMAGE_TAG% %DOCKERHUB_USER%/%IMAGE_NAME%:%IMAGE_TAG%'
                     bat 'docker push %DOCKERHUB_USER%/%IMAGE_NAME%:%IMAGE_TAG%'
